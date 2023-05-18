@@ -10,17 +10,18 @@ contract vendingMachine {
         owner = msg.sender;
         donutsBalances[address(this)]=100;
     }
-    function getVendingMachineBalances() public view returns (uint ){
+    function getVendingMachineBalances() public view returns(uint ){
         return donutsBalances[address(this)];
     }
-    function restock(uint amount) public{
+    function restock(uint _amount) public{
         require(msg.sender==owner,"only the owner can restock this machine");
-        donutsBalances[address(this)]+= amount;
+        donutsBalances[address(this)] += _amount;
     }
     function purchase(uint amount) public payable {
-        // require(msg.value >= amount*  , "you must pay atleast 2 ether");
+        require(msg.value >= amount*2 ether  , "you must pay atleast 2 ether");
         require(donutsBalances[address(this)]>= amount,"not enough donuts in stock.");
-        donutsBalances[address(this)]-=amount;
-        donutsBalances[msg.sender]+= amount;
+        donutsBalances[address(this)] -= amount;
+        donutsBalances[msg.sender] += amount;
     }
-}
+    receive() external payable {}
+    }
